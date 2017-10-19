@@ -15,11 +15,12 @@ class SwisdomTests: XCTestCase {
         let client = try! VisdomClient()
         client.log = { print($0) }
         
-        var opts = ScatterOptions()
-        opts.markersize = 15
-        opts.markersymbol = .starOpen
-        opts.colormap = .earth
-        opts.markercolor = [Color.red, Color.green, Color.blue]
+        var opts = ScatterOptions { opts in
+            opts.markersize = 15
+            opts.markersymbol = .starOpen
+            opts.colormap = .earth
+            opts.markercolor = [Color.red, Color.green, Color.blue]
+        }
         
         let points = Iris.x_train.map { Point2(x: $0[0], y: $0[1]) }
         let labels = Iris.y_train.map { $0 + 1 }
@@ -28,6 +29,9 @@ class SwisdomTests: XCTestCase {
         print(res)
         
         opts.markersymbol = .hexagon
+        opts.xtick = false
+        opts.ytickstep = 1
+        opts.legend = ["Iris1", "Iris2", "Iris3"]
         let res2 = client.scatter(points: points, labels: labels, opts: opts)
         print(res2)
     }
