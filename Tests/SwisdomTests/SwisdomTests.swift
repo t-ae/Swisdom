@@ -53,7 +53,9 @@ class SwisdomTests: XCTestCase {
         let client = try! VisdomClient()
         client.log = { print($0) }
         
-        var opts = LineOptions()
+        var opts = LineOptions { opts in
+            
+        }
         
         let y1 = (0..<100).map { x -> Double in
             let x = Double(x) / 100
@@ -81,6 +83,20 @@ class SwisdomTests: XCTestCase {
         let y2: [Double] = [2, 3, 4, 1, 2, 3, 4]
         
         let res = client.bar(y: [y1, y2])
+        print(res)
+    }
+    
+    func testPie() {
+        let client = try! VisdomClient()
+        client.log = { print($0) }
+        
+        let x: [Double] = [1, 2, 3, 4, 5, 1, 0, 2]
+        let opts = PieOptions { opts in
+            opts.title = "Pie"
+            opts.legend = x.map { String($0) }
+        }
+        
+        let res = client.pie(x: x, env: "pie", opts: opts)
         print(res)
     }
     
