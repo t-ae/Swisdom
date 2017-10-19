@@ -1,3 +1,4 @@
+import Foundation
 
 extension VisdomClient {
     // MARK: 2D
@@ -5,19 +6,19 @@ extension VisdomClient {
                         win: String? = nil,
                         env: String? = nil,
                         opts: ScatterOptions = ScatterOptions()) -> String? {
-        let label = [Int](repeating: 1, count: points.count)
-        return scatter(points: points, label: label, win: win, env: env, opts: opts)
+        let labels = [Int](repeating: 1, count: points.count)
+        return scatter(points: points, labels: labels, win: win, env: env, opts: opts)
     }
     
     public func scatter(points: [Point2],
-                        label: [Int],
+                        labels: [Int],
                         win: String? = nil,
                         env: String? = nil,
                         opts: ScatterOptions = ScatterOptions()) -> String? {
-        precondition(points.count == label.count)
-        precondition(label.min()! == 1)
+        precondition(points.count == labels.count)
+        precondition(labels.min()! == 1)
         
-        let K = label.max()!
+        let K = labels.max()!
         
         if let legend = opts.legend {
             precondition(legend.count == K)
@@ -31,7 +32,7 @@ extension VisdomClient {
         let mc = opts.markercolor
         var data: [ScatterData] = []
         for k in 1...K {
-            let mask = label.map { $0 == k }
+            let mask = labels.map { $0 == k }
             if mask.contains(true) {
                 let points = zip(points, mask).flatMap { $0.1 ? $0.0 : nil }
                 let name = opts.legend?[k-1] ?? String(k)
@@ -50,6 +51,8 @@ extension VisdomClient {
         
         let msg = ScatterMessage(data: data, win: win, eid: env, layout: layout, opts: opts)
         
+        print(msg.data.count)
+        
         return send(msg)
     }
     
@@ -58,19 +61,19 @@ extension VisdomClient {
                         win: String? = nil,
                         env: String? = nil,
                         opts: ScatterOptions = ScatterOptions()) -> String? {
-        let label = [Int](repeating: 1, count: points.count)
-        return scatter(points: points, label: label, win: win, env: env, opts: opts)
+        let labels = [Int](repeating: 1, count: points.count)
+        return scatter(points: points, labels: labels, win: win, env: env, opts: opts)
     }
     
     public func scatter(points: [Point3],
-                        label: [Int],
+                        labels: [Int],
                         win: String? = nil,
                         env: String? = nil,
                         opts: ScatterOptions = ScatterOptions()) -> String? {
-        precondition(points.count == label.count)
-        precondition(label.min()! == 1)
+        precondition(points.count == labels.count)
+        precondition(labels.min()! == 1)
         
-        let K = label.max()!
+        let K = labels.max()!
         
         if let legend = opts.legend {
             precondition(legend.count == K)
@@ -84,7 +87,7 @@ extension VisdomClient {
         let mc = opts.markercolor
         var data: [ScatterData] = []
         for k in 1...K {
-            let mask = label.map { $0 == k }
+            let mask = labels.map { $0 == k }
             if mask.contains(true) {
                 let points = zip(points, mask).flatMap { $0.1 ? $0.0 : nil }
                 let name = opts.legend?[k-1] ?? String(k)
@@ -113,6 +116,15 @@ struct ScatterMessage: MessageProtocol {
     var eid: String?
     var layout: Layout
     var opts: ComprehensiveOptions
+    
+    func toJson() throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.nonConformingFloatEncodingStrategy = .throw
+        
+        _ = try encoder.encode(opts)
+        
+        return try encoder.encode(self)
+    }
 }
 
 struct ScatterData: Encodable {
@@ -195,5 +207,10 @@ public class ScatterOptions: ComprehensiveOptions {
     
     public override init() {
         super.init()
+    }
+    
+    // FIXME: Line plot crashes without this
+    public override func encode(to encoder: Encoder) throws {
+        return try super.encode(to: encoder)
     }
 }

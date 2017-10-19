@@ -75,5 +75,6 @@ public class ComprehensiveOptions: Encodable {
             precondition(0 <= newValue && newValue <= 1)
         }
     }
+    
     init() {}
 }
