@@ -35,12 +35,12 @@ class SwisdomTests: XCTestCase {
     func testScatter3D() {
         let client = try! VisdomClient()
         client.log = { print($0) }
-        
-        var opts = ScatterOptions()
-        opts.markersize = 2
-        opts.markersymbol = .diamond
-        opts.colormap = .earth
-        opts.markercolor = [Color.red, Color.green, Color.blue]
+        var opts = ScatterOptions { opts in
+            opts.markersize = 2
+            opts.markersymbol = .diamond
+            opts.colormap = .earth
+            opts.markercolor = [Color.red, Color.green, Color.blue]
+        }
         
         let points = Iris.x_train.map { Point3(x: $0[0], y: $0[1], z: $0[2]) }
         let labels = Iris.y_train.map { $0 + 1 }

@@ -190,7 +190,7 @@ public class ScatterOptions: Options {
     public var markercolor: [Color]?
     public var legend: [String]?
     
-    public override init() {
+    public required init() {
         super.init()
     }
     

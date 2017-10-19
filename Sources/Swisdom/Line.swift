@@ -50,7 +50,7 @@ extension VisdomClient {
 public class LineOptions: ScatterOptions {
     public var fillarea: Bool?
     
-    public override init() {
+    public required init() {
         super.init()
     }
     

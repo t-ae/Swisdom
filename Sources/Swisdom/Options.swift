@@ -79,7 +79,17 @@ struct ComprehensiveOptions: Encodable {
     init() {}
 }
 
-public class Options {
+protocol Configurable : class {
+    init()
+}
+extension Configurable {
+    public init(_ configure: (Self)->Void) {
+        self.init()
+        configure(self)
+    }
+}
+
+public class Options: Configurable {
     public var title: String?
     public var width: Double?
     public var height: Double?
@@ -117,7 +127,7 @@ public class Options {
     public var margintop: Double?
     public var marginbottom: Double?
     
-    init() {}
+    public required init() {}
     
     func toComprehensive() -> ComprehensiveOptions {
         var opts = ComprehensiveOptions()
