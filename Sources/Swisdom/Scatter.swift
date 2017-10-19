@@ -43,7 +43,8 @@ extension VisdomClient {
                 data.append(ScatterData(points: points,
                                         name: name,
                                         mode: opts.mode!,
-                                        marker: maker))
+                                        marker: maker,
+                                        fillarea: opts.fillarea ?? false))
             }
         }
         
@@ -133,8 +134,9 @@ struct ScatterData: Encodable {
     let type: String
     let mode: Mode
     let marker: MarkerData
+    let fill: String?
     
-    init(points: [Point2], name: String, mode: Mode, marker: MarkerData) {
+    init(points: [Point2], name: String, mode: Mode, marker: MarkerData, fillarea: Bool) {
         self.x = points.map { $0.x }
         self.y = points.map { $0.y }
         self.z = nil
@@ -142,6 +144,7 @@ struct ScatterData: Encodable {
         self.type = "scatter"
         self.mode = mode
         self.marker = marker
+        self.fill = fillarea ? "tonexty" : nil
     }
     
     init(points: [Point3], name: String, mode: Mode, marker: MarkerData) {
@@ -152,6 +155,7 @@ struct ScatterData: Encodable {
         self.type = "scatter3d"
         self.mode = mode
         self.marker = marker
+        self.fill = nil
     }
 }
 

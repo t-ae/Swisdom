@@ -33,7 +33,6 @@ public class VisdomClient {
         
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
-        print(message)
         let json = try! message.toJson()
         req.httpBody = json
         
