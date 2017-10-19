@@ -54,6 +54,9 @@ struct ComprehensiveOptions: Encodable {
     var columnnames: [String]?
     var rownames: [String]?
     
+    // MARK: Bar specific
+    var stacked: Bool?
+    
     // MARK: Histogram specific
     var numbins: Int?
     

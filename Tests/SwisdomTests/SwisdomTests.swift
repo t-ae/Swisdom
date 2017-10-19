@@ -73,6 +73,17 @@ class SwisdomTests: XCTestCase {
         print(res2)
     }
     
+    func testBar() {
+        let client = try! VisdomClient()
+        client.log = { print($0) }
+        
+        let y1: [Double] = [1, 2, 3, 4, 5, 6, 7]
+        let y2: [Double] = [2, 3, 4, 1, 2, 3, 4]
+        
+        let res = client.bar(y: [y1, y2])
+        print(res)
+    }
+    
     func testWinExists() {
         
     }
