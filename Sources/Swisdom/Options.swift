@@ -43,7 +43,7 @@ struct ComprehensiveOptions: Encodable {
     var markers: Bool?
     var colormap: ColorMap?
     var markersymbol: MarkerSymbol?
-    var markersize: Double?
+    var markersize: Double? { willSet { precondition(newValue == nil || newValue! > 0) } }
     var markercolor: [Color]?
     var legend: [String]?
     
