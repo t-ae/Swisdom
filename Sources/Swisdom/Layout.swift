@@ -7,6 +7,7 @@ struct Layout: Encodable {
     var yaxis: AxisFormat?
     var zaxis: AxisFormat?
     var margin: Margin
+    var barmode: String?
 }
 
 struct Margin: Encodable {
@@ -30,7 +31,8 @@ func opts2layout(opts: ComprehensiveOptions, is3d: Bool) -> Layout {
            margin: Margin(l: opts.marginleft ?? 60,
                           r: opts.marginright ?? 60,
                           t: opts.margintop ?? 60,
-                          b: opts.marginbottom ?? 60))
+                          b: opts.marginbottom ?? 60),
+           barmode: opts.stacked.map { $0 ? "stack" : "group" })
     
     
 }

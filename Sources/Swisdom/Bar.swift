@@ -7,6 +7,15 @@ extension VisdomClient {
                     win: String? = nil,
                     env: String? = nil,
                     opts: BarOptions = BarOptions()) -> String? {
+        let x = (1...y.first!.count).map { Double($0) }
+        return bar(x: x, y: y, win: win, env: env, opts: opts)
+    }
+    
+    public func bar(x: [Double],
+                    y: [Bars],
+                    win: String? = nil,
+                    env: String? = nil,
+                    opts: BarOptions = BarOptions()) -> String? {
         
         let K = y.first!.count
         
@@ -14,21 +23,14 @@ extension VisdomClient {
         
         opts.stacked = opts.stacked ?? false
         
-        let rownames: [String]
-        if opts.rownames != nil {
-            precondition(opts.rownames!.count == K)
-            rownames = opts.rownames!
-        } else {
-            rownames = (1...K).map { String($0) }
-        }
         if let legend = opts.legend {
-            precondition(legend.count == K)
+            precondition(legend.count == y.count)
         }
         
         var data: [BarData] = []
         for k in 0..<y.count {
             data.append(BarData(y: y[k],
-                                x: rownames,
+                                x: x,
                                 name: opts.legend?[k]))
         }
         
@@ -54,11 +56,11 @@ struct BarMessage: MessageProtocol {
 
 struct BarData: Encodable {
     var y: [Double]
-    var x: [String]
+    var x: [Double]
     var type: String = "bar"
     var name: String?
     
-    init(y: [Double], x: [String], name: String?) {
+    init(y: [Double], x: [Double], name: String?) {
         self.y = y
         self.x = x
         self.name = name
@@ -67,9 +69,9 @@ struct BarData: Encodable {
 
 public class BarOptions: Options {
     
-    var rownames: [String]?
-    var stacked: Bool?
-    var legend: [String]?
+    public var rownames: [String]?
+    public var stacked: Bool?
+    public var legend: [String]?
     
     override func toComprehensive() -> ComprehensiveOptions {
         var opts = super.toComprehensive()

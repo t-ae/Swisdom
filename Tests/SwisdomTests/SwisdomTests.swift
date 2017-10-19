@@ -79,11 +79,19 @@ class SwisdomTests: XCTestCase {
         let client = try! VisdomClient()
         client.log = { print($0) }
         
+        var opts = BarOptions()
+        
         let y1: [Double] = [1, 2, 3, 4, 5, 6, 7]
         let y2: [Double] = [2, 3, 4, 1, 2, 3, 4]
         
-        let res = client.bar(y: [y1, y2])
+        let res = client.bar(y: [y1, y2], opts: opts)
         print(res)
+        
+        opts.stacked = true
+        opts.legend = ["y1", "y2"]
+        let x = (0..<y1.count).map { Double($0)/10 }
+        let res2 = client.bar(x:x, y: [y1, y2], opts: opts)
+        print(res2)
     }
     
     func testPie() {
