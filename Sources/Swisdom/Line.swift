@@ -48,8 +48,15 @@ extension VisdomClient {
 }
 
 public class LineOptions: ScatterOptions {
-    public override var fillarea: Bool? {
-        get { return super.fillarea }
-        set { super.fillarea = newValue }
+    public var fillarea: Bool?
+    
+    public override init() {
+        super.init()
+    }
+    
+    override func toComprehensive() -> ComprehensiveOptions {
+        var opts = super.toComprehensive()
+        opts.fillarea = fillarea
+        return opts
     }
 }

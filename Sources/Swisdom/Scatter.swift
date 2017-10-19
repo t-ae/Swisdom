@@ -24,6 +24,8 @@ extension VisdomClient {
             precondition(legend.count == K)
         }
         
+        var opts = opts.toComprehensive()
+        
         opts.colormap = opts.colormap ?? .viridis
         opts.mode = opts.mode ?? .markers
         opts.markersymbol = opts.markersymbol ?? .circle
@@ -79,6 +81,8 @@ extension VisdomClient {
         if let legend = opts.legend {
             precondition(legend.count == K)
         }
+        
+        var opts = opts.toComprehensive()
         
         opts.colormap = opts.colormap ?? .viridis
         opts.mode = opts.mode ?? .markers
@@ -177,42 +181,28 @@ struct LineData: Encodable {
     var width: Double = 0.5
 }
 
-public class ScatterOptions: ComprehensiveOptions {
-    public override var mode: Mode? {
-        get { return super.mode }
-        set { super.mode = newValue }
-    }
-    public override var markers: Bool? {
-        get { return super.markers }
-        set { super.markers = newValue }
-    }
-    public override var colormap: ColorMap? {
-        get { return super.colormap }
-        set { super.colormap = newValue }
-    }
-    public override var markersymbol: MarkerSymbol? {
-        get { return super.markersymbol }
-        set { super.markersymbol = newValue }
-    }
-    public override var markersize: Double? {
-        get { return super.markersize }
-        set { super.markersize = newValue }
-    }
-    public override var markercolor: [Color]? {
-        get { return super.markercolor }
-        set { super.markercolor = newValue }
-    }
-    public override var legend: [String]? {
-        get { return super.legend }
-        set { super.legend = newValue }
-    }
+public class ScatterOptions: Options {
+    public var mode: Mode?
+    public var markers: Bool?
+    public var colormap: ColorMap?
+    public var markersymbol: MarkerSymbol?
+    public var markersize: Double?
+    public var markercolor: [Color]?
+    public var legend: [String]?
     
     public override init() {
         super.init()
     }
     
-    // FIXME: Line plot crashes without this
-    public override func encode(to encoder: Encoder) throws {
-        return try super.encode(to: encoder)
+    override func toComprehensive() -> ComprehensiveOptions {
+        var opts = super.toComprehensive()
+        opts.mode = mode
+        opts.markers = markers
+        opts.colormap = colormap
+        opts.markersymbol = markersymbol
+        opts.markersize = markersize
+        opts.markercolor = markercolor
+        opts.legend = legend
+        return opts
     }
 }
