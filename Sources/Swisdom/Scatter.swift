@@ -121,8 +121,6 @@ struct ScatterMessage: MessageProtocol {
         let encoder = JSONEncoder()
         encoder.nonConformingFloatEncodingStrategy = .throw
         
-        _ = try encoder.encode(opts)
-        
         return try encoder.encode(self)
     }
 }

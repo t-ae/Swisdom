@@ -23,8 +23,6 @@ public class VisdomClient {
         self.init(url: url, env: env)
     }
     
-    
-    
     func send(_ message: MessageProtocol, endpoint: String = "events") -> String? {
         var message = message
         if message.eid == nil {
