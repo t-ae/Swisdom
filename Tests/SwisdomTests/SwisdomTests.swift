@@ -116,19 +116,42 @@ class SwisdomTests: XCTestCase {
         let client = try! VisdomClient()
         client.log = { print($0) }
         
-        let boxes: [[Double]] = [
-            [0, 1, 2, 3, 4, 5],
-            [1, 1, 1, 2, 3, 4],
-            [3, 3, 2, 2, 4, 4],
-            [1, 2, 2, 3, 3, 3, 3, 3, 3, 3 ,3, 4, 4, 5]
-        ]
-        
-        let opts = BoxOptions { opts in
+        do {
+            let boxes: [[Double]] = [
+                [0, 1, 2, 3, 4, 5],
+                [1, 1, 1, 2, 3, 4],
+                [3, 3, 2, 2, 4, 4],
+                [1, 2, 2, 3, 3, 3, 3, 3, 3, 3 ,3, 4, 4, 5]
+            ]
             
+            let opts = BoxOptions { opts in
+                
+            }
+            
+            let res = client.boxplot(boxes: boxes, opts: opts)
+            print(res)
+        }
+        do {
+            let iris0 = zip(Iris.x_train, Iris.y_train).flatMap { $0.1 == 0 ? $0.0 : nil }
+            let iris1 = zip(Iris.x_train, Iris.y_train).flatMap { $0.1 == 1 ? $0.0 : nil }
+            let iris2 = zip(Iris.x_train, Iris.y_train).flatMap { $0.1 == 2 ? $0.0 : nil }
+            
+            let boxes = [
+                iris0.map { $0[0] },
+                iris1.map { $0[0] },
+                iris2.map { $0[0] }
+            ]
+            
+            let opts = BoxOptions { opts in
+                opts.legend = [
+                    "Iris0", "Iris1", "Iris2"
+                ]
+            }
+            
+            let res = client.boxplot(boxes: boxes, opts: opts)
+            print(res)
         }
         
-        let res = client.boxplot(boxes: boxes, opts: opts)
-        print(res)
     }
     
     func testWinExists() {
