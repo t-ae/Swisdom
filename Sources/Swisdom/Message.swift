@@ -17,7 +17,7 @@ extension MessageProtocol {
 }
 
 struct Message: MessageProtocol {
-    let win: String?
+    var win: String?
     var eid: String?
     
     init(win: String? = nil, env: String? = nil) {

@@ -1,7 +1,7 @@
 
 public struct Point2 {
-    let x: Double
-    let y: Double
+    var x: Double
+    var y: Double
     
     public init(x: Double, y: Double) {
         self.x = x
@@ -10,9 +10,9 @@ public struct Point2 {
 }
 
 public struct Point3 {
-    let x: Double
-    let y: Double
-    let z: Double
+    var x: Double
+    var y: Double
+    var z: Double
     
     public init(x: Double, y: Double, z: Double) {
         self.x = x

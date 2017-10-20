@@ -105,13 +105,19 @@ class SwisdomTests: XCTestCase {
         client.log = { print($0) }
         
         let x: [Double] = [1, 2, 3, 4, 5, 1, 0, 2]
-        let opts = PieOptions { opts in
-            opts.title = "Pie"
-            opts.legend = x.map { String($0) }
-        }
+        let opts = PieOptions()
         
         let res = client.pie(x: x, env: "pie", opts: opts)
         print(res)
+        
+        opts.title = "Pie"
+        opts.legend = (1...8).map { "category\($0)" }
+        opts.width = 1000
+        opts.height = 500
+        opts.marginbottom = 100
+        opts.marginright = 400
+        let res2 = client.pie(x: x, env: "pie", opts: opts)
+        print(res2)
     }
     
     func testBox() {

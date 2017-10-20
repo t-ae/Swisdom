@@ -15,10 +15,10 @@ extension VisdomClient {
 
 struct TextMessage: MessageProtocol {
     
-    let data: [[String: String]]
-    let win: String?
+    var data: [[String: String]]
+    var win: String?
     var eid: String?
-    let opts = ComprehensiveOptions()
+    var opts = ComprehensiveOptions()
     
     init(data: [String: String], win: String?, env: String?) {
         self.data = [data]
