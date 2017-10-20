@@ -37,6 +37,18 @@ extension Color {
         return Color(r: 0, g: 0, b: 255)
     }
     
+    public static var cyan: Color {
+        return Color(r: 0, g: 255, b: 255)
+    }
+    
+    public static var magenta: Color {
+        return Color(r: 255, g: 0, b: 255)
+    }
+    
+    public static var yellow: Color {
+        return Color(r: 255, g: 255, b: 0)
+    }
+    
     public static var white: Color {
         return Color(intensity: 255)
     }
