@@ -6,6 +6,7 @@
 - text
 - scatter
 - line
+- heatmap
 - bar
 - boxplot
 - surf
