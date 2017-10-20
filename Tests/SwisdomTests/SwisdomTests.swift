@@ -58,9 +58,7 @@ class SwisdomTests: XCTestCase {
         let client = try! VisdomClient()
         client.log = { print($0) }
         
-        var opts = LineOptions { opts in
-            
-        }
+        var opts = LineOptions()
         
         let y1 = (0..<100).map { x -> Double in
             let x = Double(x) / 100
@@ -75,7 +73,9 @@ class SwisdomTests: XCTestCase {
         print(res)
         
         opts.fillarea = true
-        
+        opts.markers = true
+        opts.ytickvals = [1, 2, 3, 4]
+        opts.yticklabels = ["1!", "2!", "3!", "4!"]
         let res2 = client.line(y: [y1, y2], opts: opts)
         print(res2)
     }
@@ -94,7 +94,8 @@ class SwisdomTests: XCTestCase {
         
         opts.stacked = true
         opts.legend = ["y1", "y2"]
-        let x = (0..<y1.count).map { Double($0)/10 }
+        opts.rownames = (1...7).map { "\($0)!" }
+        let x = (0..<y1.count).map { "\(Double($0)/10)!" }
         let res2 = client.bar(x:x, y: [y1, y2], opts: opts)
         print(res2)
     }
@@ -200,6 +201,8 @@ class SwisdomTests: XCTestCase {
         opts.colormap = .earth
         opts.xmin = 2
         opts.xmax = 5
+        opts.xlabel = "x dayo"
+        opts.ylabel = "y dayo"
         let res2 = client.contour(x: x, opts: opts)
         print(res2)
     }
@@ -222,9 +225,11 @@ class SwisdomTests: XCTestCase {
         let res = client.heatmap(x: x, opts: opts)
         print(res)
         
-        opts.colormap = .earth
+        opts.colormap = .greens
         opts.xmin = 2
         opts.xmax = 5
+        opts.rownames = (1...6).map { "row\($0)!" }
+        opts.columnnames = (1...6).map { "col\($0)!" }
         let res2 = client.heatmap(x: x, opts: opts)
         print(res2)
     }

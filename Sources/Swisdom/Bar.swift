@@ -7,11 +7,11 @@ extension VisdomClient {
                     win: String? = nil,
                     env: String? = nil,
                     opts: BarOptions = BarOptions()) -> String? {
-        let x = (1...y.first!.count).map { Double($0) }
+        let x = (1...y.first!.count).map { String($0) }
         return bar(x: x, y: y, win: win, env: env, opts: opts)
     }
     
-    public func bar(x: [Double],
+    public func bar(x: [String],
                     y: [Bars],
                     win: String? = nil,
                     env: String? = nil,
@@ -23,6 +23,9 @@ extension VisdomClient {
         
         opts.stacked = opts.stacked ?? false
         
+        if let rownames = opts.rownames {
+            precondition(rownames.count == K)
+        }
         if let legend = opts.legend {
             precondition(legend.count == y.count)
         }
@@ -30,7 +33,7 @@ extension VisdomClient {
         var data: [BarData] = []
         for k in 0..<y.count {
             data.append(BarData(y: y[k],
-                                x: x,
+                                x: opts.rownames ?? x,
                                 name: opts.legend?[k]))
         }
         
@@ -56,11 +59,11 @@ struct BarMessage: MessageProtocol {
 
 struct BarData: Encodable {
     var y: [Double]
-    var x: [Double]
+    var x: [String]
     var type: String = "bar"
     var name: String?
     
-    init(y: [Double], x: [Double], name: String?) {
+    init(y: [Double], x: [String], name: String?) {
         self.y = y
         self.x = x
         self.name = name
