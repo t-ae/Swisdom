@@ -151,7 +151,56 @@ class SwisdomTests: XCTestCase {
             let res = client.boxplot(boxes: boxes, opts: opts)
             print(res)
         }
+    }
+    
+    func testSurface() {
+        let client = try! VisdomClient()
+        client.log = { print($0) }
         
+        let x: [[Double]] = [
+            [0, 0, 0, 3, 1, 0],
+            [0, 1, 6, 8, 2, 0],
+            [0, 2, 9, 9, 5, 3],
+            [1, 3, 7, 8, 4, 2],
+            [0, 2, 5, 4, 3, 0],
+            [0, 0, 2, 1, 1, 0]
+        ]
+        
+        var opts = SurfaceOptions()
+        
+        let res = client.surf(x: x, opts: opts)
+        print(res)
+        
+        opts.colormap = .blues
+        opts.xmin = 2
+        opts.xmax = 5
+        let res2 = client.surf(x: x, opts: opts)
+        print(res2)
+    }
+    
+    func testContour() {
+        let client = try! VisdomClient()
+        client.log = { print($0) }
+        
+        let x: [[Double]] = [
+            [0, 0, 0, 3, 1, 0],
+            [0, 1, 6, 8, 2, 0],
+            [0, 2, 9, 9, 5, 3],
+            [1, 3, 7, 8, 4, 2],
+            [0, 2, 5, 4, 3, 0],
+            [0, 0, 2, 1, 1, 0]
+        ]
+        
+        var opts = SurfaceOptions()
+        
+        let res = client.contour(x: x, opts: opts)
+        print(res)
+        
+        opts.colormap = .earth
+        opts.xmin = 2
+        opts.xmax = 5
+        let res2 = client.contour(x: x, opts: opts)
+        print(res2)
     }
     
     func testWinExists() {
