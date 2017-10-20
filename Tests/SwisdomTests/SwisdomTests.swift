@@ -112,6 +112,25 @@ class SwisdomTests: XCTestCase {
         print(res)
     }
     
+    func testBox() {
+        let client = try! VisdomClient()
+        client.log = { print($0) }
+        
+        let boxes: [[Double]] = [
+            [0, 1, 2, 3, 4, 5],
+            [1, 1, 1, 2, 3, 4],
+            [3, 3, 2, 2, 4, 4],
+            [1, 2, 2, 3, 3, 3, 3, 3, 3, 3 ,3, 4, 4, 5]
+        ]
+        
+        let opts = BoxOptions { opts in
+            
+        }
+        
+        let res = client.boxplot(boxes: boxes, opts: opts)
+        print(res)
+    }
+    
     func testWinExists() {
         
     }
