@@ -6,7 +6,7 @@ class SwisdomTests: XCTestCase {
     
     func testText() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         let res = client.text("hogehoge")
         print(res)
@@ -14,7 +14,7 @@ class SwisdomTests: XCTestCase {
     
     func testScatter() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         var opts = ScatterOptions { opts in
             opts.markersize = 15
@@ -39,7 +39,7 @@ class SwisdomTests: XCTestCase {
     
     func testScatter3D() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         var opts = ScatterOptions { opts in
             opts.markersize = 2
             opts.markersymbol = .diamond
@@ -56,7 +56,7 @@ class SwisdomTests: XCTestCase {
     
     func testLine() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         var opts = LineOptions()
         
@@ -82,7 +82,7 @@ class SwisdomTests: XCTestCase {
     
     func testBar() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         var opts = BarOptions()
         
@@ -102,7 +102,7 @@ class SwisdomTests: XCTestCase {
     
     func testPie() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         let x: [Double] = [1, 2, 3, 4, 5, 1, 0, 2]
         let opts = PieOptions()
@@ -122,7 +122,7 @@ class SwisdomTests: XCTestCase {
     
     func testBox() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         do {
             let boxes: [[Double]] = [
@@ -163,7 +163,7 @@ class SwisdomTests: XCTestCase {
     
     func testSurface() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         let x: [[Double]] = [
             [0, 0, 0, 3, 1, 0],
@@ -188,7 +188,7 @@ class SwisdomTests: XCTestCase {
     
     func testContour() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         let x: [[Double]] = [
             [0, 0, 0, 3, 1, 0],
@@ -215,7 +215,7 @@ class SwisdomTests: XCTestCase {
     
     func testHeatmap() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         let x: [[Double]] = [
             [0, 0, 0, 3, 1, 0],
@@ -241,19 +241,22 @@ class SwisdomTests: XCTestCase {
     }
     
     func testWinExists() {
-        
+        let client = try! VisdomClient()
+        client.logger = { print($0) }
+        let res = client.winExists(win: "")
+        print(res)
     }
     
     func testCheckConnection() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         let res = client.checkConnection()
         print(res)
     }
     
     func testChangeWin() {
         let client = try! VisdomClient()
-        client.log = { print($0) }
+        client.logger = { print($0) }
         
         var opts = ScatterOptions { opts in
             opts.markersize = 15
@@ -271,6 +274,29 @@ class SwisdomTests: XCTestCase {
         sleep(3)
         
         let res2 = client.text("hogehoge", win: res)
+        print(res2)
+    }
+    
+    func testClose() {
+        let client = try! VisdomClient()
+        client.logger = { print($0) }
+        
+        var opts = ScatterOptions { opts in
+            opts.markersize = 15
+            opts.markersymbol = .starOpen
+            opts.colormap = .earth
+            opts.markercolor = [Color.red, Color.green, Color.blue]
+        }
+        
+        let points = Iris.x_train.map { Point2(x: $0[0], y: $0[1]) }
+        let labels = Iris.y_train.map { $0 + 1 }
+        
+        let res = client.scatter(points: points, labels: labels, opts: opts)
+        print(res)
+        
+        sleep(3)
+        
+        let res2 = client.close(win: res!)
         print(res2)
     }
 }

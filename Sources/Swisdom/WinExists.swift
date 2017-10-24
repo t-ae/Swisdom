@@ -1,4 +1,5 @@
 
+// Not available in Visdom 0.1.5
 
 extension VisdomClient {
     public func winExists(win: String, env: String? = nil) -> Bool? {

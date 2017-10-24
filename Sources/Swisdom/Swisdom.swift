@@ -6,7 +6,7 @@ public class VisdomClient {
     let url: URL
     let env: String
     
-    public var log: ((String)->Void)? = nil
+    public var logger: ((String)->Void)? = nil
     
     public init(url: URL, env: String = "main") {
         self.url = url
@@ -36,18 +36,18 @@ public class VisdomClient {
         let json = try! message.toJson()
         req.httpBody = json
         
+        logger?("Request: \(url)")
+        if let messageString = String(data: json, encoding: .utf8) {
+            logger?("Message: \(messageString)")
+        }
+        
         let semaphore = DispatchSemaphore(value: 0)
         var ret: String? = nil
-        
-        log?("Request: \(url)")
-        if let messageString = String(data: json, encoding: .utf8) {
-            log?("Message: \(messageString)")
-        }
         URLSession.shared.dataTask(with: req) { [weak self] data, response, error in
             defer { semaphore.signal() }
             
             if let response = response {
-                self?.log?("Response: \(response)")
+                self?.logger?("Response: \(response)")
             }
             ret = data.flatMap { String(data: $0, encoding: .utf8) }
         }.resume()
